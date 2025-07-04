@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Product Recommender</title>
+    <style>
+        body {
+           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+           background: linear-gradient(to bottom, #f3f3f3, #e3e6e6);
+           color: #111;
+           margin: 0;
+           padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+        p.subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        select, input[type="number"] {
+            width: 80%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+        }
+        h2 {
+            text-align: left;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: #1a1a1a;
+        }
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .rec-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            transition: box-shadow 0.3s, transform 0.3s;
+        }
+        .rec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+        .rec-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .rec-card strong {
+            font-size: 1.1rem;
+            color: #0056b3;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .rec-card p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .error {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Product Recommender</h1>
+        <p class="subtitle">Discover products you'll love based on our hybrid recommendation engine.</p>
+        
+        <form method="POST">
+            <input type="text" name="item_name" placeholder="Enter product name" value="{{ selected_item }}" required>
+            <input type="number" name="num_rec" value="{{ num_rec }}" min="1" max="20" placeholder="Number of recommendations">
+            <button type="submit">Get Recommendations</button>
+        </form>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if recommendations %}
+            <h2>Top Recommendations for You</h2>
+            <div class="recommendations">
+                {% for rec in recommendations %}
+                    <div class="rec-card">
+                        <img src="{{ rec.ImageURL }}" alt="{{ rec.Name }}" onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=No+Image';">
+                        <strong>{{ rec.Name }}</strong>
+                        <p><b>Brand:</b> {{ rec.Brand }}</p>
+                        <p><b>Rating:</b> {{ '%.1f'|format(rec.Rating|float) if rec.Rating else 'N/A' }} / 5.0</p>
+                        <p><b>Reviews:</b> {{ rec.ReviewCount|int if rec.ReviewCount else 0 }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
