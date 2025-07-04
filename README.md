@@ -6,6 +6,10 @@ A Flask-based Machine Learning web application that provides intelligent product
 
 This project helps users discover relevant products from an e-commerce catalog by entering the name of a product they like. The system generates similar product suggestions using a **hybrid recommendation approach**.
 
+## 🚀 Live Demo
+
+![Image](https://github.com/user-attachments/assets/e500aaab-679d-4eee-949c-33e8839ed26b)
+
 ### 🔍 Features
 - Content-Based Filtering using **TF-IDF** and **Cosine Similarity**
 - Simplified Collaborative Filtering based on user-product interaction matrix
